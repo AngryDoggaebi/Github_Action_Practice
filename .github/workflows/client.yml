@@ -1,0 +1,32 @@
+# .github/workflows/client.yml
+name: client
+on:
+  push:
+    branches:
+      - reperence
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout source code.
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./my-agora-states-client-react
+      - name: Build
+        run: npm run build
+        working-directory: ./my-agora-states-client-react
+      - name: SHOW AWS CLI VERSION
+        run: |
+          aws --version
+      - name: Sync Bucket
+        env:
+          AWS_ACCESS_KEY_ID: ${AGORASTATES_YML_AWS_ACCESS}
+          AWS_SECRET_ACCESS_KEY: ${AGORASTATES_YML_AWS_SECRET}
+          AWS_EC2_METADATA_DISABLED: true
+        run: |
+          aws s3 sync \
+            --region ap-northeast-2 \
+            build s3://fe-73-angry-doggaebi-s3 \
+            --delete
+        working-directory: ./my-agora-states-client-react
