@@ -3,7 +3,7 @@ name: client
 on:
   push:
     branches:
-      - reference 
+      - reference
       # 해당 브랜치 명(클론 받아온 리포지토리의 해당 브랜치 명)
 jobs:
   build:
@@ -27,10 +27,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AGORASTATES_YML_AWS_SECRET }}
           AWS_EC2_METADATA_DISABLED: true
 
-          # CRI 문법 (찾아보면 나옴)
-          # delete : 빌드 파일 업로드 후 sync 안 맞는 파일들 지워주는 커맨드
-          # aws s3 sync \ aws s3에서 시작하는데 sync로 시작할거다(?)
-          # --region ap-northeast-2 \ 서울 리전에서 시작할거다
+          # CRI 문법
         run: |
           aws s3 sync \
             --region ap-northeast-2 \
