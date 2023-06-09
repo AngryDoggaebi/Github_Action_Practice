@@ -3,7 +3,8 @@ name: client
 on:
   push:
     branches:
-      - reference
+      - reference 
+      # 해당 브랜치 명(클론 받아온 리포지토리의 해당 브랜치 명)
 jobs:
   build:
     runs-on: ubuntu-20.04
@@ -21,9 +22,15 @@ jobs:
           aws --version
       - name: Sync Bucket
         env:
+          # {} 한 번만 사용하면 문자열로 인식. secrets 없애면 안 됨
           AWS_ACCESS_KEY_ID: ${{ secrets.AGORASTATES_YML_AWS_ACCESS }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AGORASTATES_YML_AWS_SECRET }}
           AWS_EC2_METADATA_DISABLED: true
+
+          # CRI 문법 (찾아보면 나옴)
+          # delete : 빌드 파일 업로드 후 sync 안 맞는 파일들 지워주는 커맨드
+          # aws s3 sync \ aws s3에서 시작하는데 sync로 시작할거다(?)
+          # --region ap-northeast-2 \ 서울 리전에서 시작할거다
         run: |
           aws s3 sync \
             --region ap-northeast-2 \
